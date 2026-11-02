@@ -131,6 +131,19 @@ function initScrollReveal() {
 function initProjectFilters() {
   const filterBtns = document.querySelectorAll('.filter-btn');
   const projectCards = document.querySelectorAll('.project-card');
+  const filterBar = document.querySelector('.filter-bar');
+
+  if (filterBar) {
+    filterBar.addEventListener('wheel', (event) => {
+      if (
+        Math.abs(event.deltaY) > Math.abs(event.deltaX) &&
+        filterBar.scrollWidth > filterBar.clientWidth
+      ) {
+        event.preventDefault();
+        filterBar.scrollLeft += event.deltaY;
+      }
+    }, { passive: false });
+  }
 
   filterBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -277,8 +290,21 @@ function initGitHubActivity() {
   const publicReposEl = document.getElementById('github-public-repos');
   const syncStatusEl = document.getElementById('github-sync-status');
   const refreshBtn = document.getElementById('github-refresh-btn');
+  const heatmapScrollWrapper = document.querySelector('.heatmap-scroll-wrapper');
 
   if (!heatmapGrid) return;
+
+  if (heatmapScrollWrapper) {
+    heatmapScrollWrapper.addEventListener('wheel', (event) => {
+      if (
+        Math.abs(event.deltaY) > Math.abs(event.deltaX) &&
+        heatmapScrollWrapper.scrollWidth > heatmapScrollWrapper.clientWidth
+      ) {
+        event.preventDefault();
+        heatmapScrollWrapper.scrollLeft += event.deltaY;
+      }
+    }, { passive: false });
+  }
 
   loadGitHubData();
 
