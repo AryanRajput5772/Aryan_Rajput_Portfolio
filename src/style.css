@@ -1724,3 +1724,337 @@ a {
   border-color: rgba(255, 255, 255, 0.45);
   transform: translateY(-2px);
 }
+
+/* Smartphone layout refinements */
+@media (max-width: 600px) {
+  html {
+    font-size: 15px;
+  }
+
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .navbar {
+    min-height: 4.25rem;
+    height: auto;
+  }
+
+  .nav-content {
+    gap: 0.5rem;
+  }
+
+  .brand {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 1rem;
+    text-overflow: ellipsis;
+  }
+
+  .nav-actions {
+    flex-shrink: 0;
+  }
+
+  .theme-trigger-btn {
+    padding: 0.55rem 0.7rem;
+  }
+
+  .theme-trigger-text {
+    display: none;
+  }
+
+  .theme-menu-dropdown {
+    right: -0.25rem;
+    width: min(260px, calc(100vw - 2rem));
+  }
+
+  .hero {
+    padding-top: 7rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .hero-grid {
+    gap: 2rem;
+  }
+
+  .hero-headline {
+    font-size: clamp(2.15rem, 11vw, 3.25rem);
+    line-height: 1.05;
+  }
+
+  .hero-copy {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .hero-kicker {
+    max-width: 100%;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.68rem;
+  }
+
+  .hero-credentials {
+    align-items: flex-start;
+    gap: 0.3rem;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.78rem;
+  }
+
+  .hero-credentials span:nth-child(2) {
+    display: none;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .hero-buttons .btnn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .hero-socials {
+    gap: 0.5rem;
+  }
+
+  .social-pill {
+    max-width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.72rem;
+    overflow-wrap: anywhere;
+  }
+
+  .portrait-box {
+    padding: 0.5rem;
+    border-radius: 1.5rem;
+  }
+
+  .portrait-inner {
+    border-radius: 1.15rem;
+  }
+
+  .portrait-badge {
+    bottom: 0.65rem;
+    left: 0.65rem;
+    right: 0.65rem;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .metrics-bar {
+    padding: 1rem 0 2rem;
+  }
+
+  .metrics-grid,
+  .github-stats-grid {
+    gap: 0.75rem;
+  }
+
+  .metric-card,
+  .github-stat-card {
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .metric-value {
+    font-size: clamp(1.45rem, 7vw, 2rem);
+  }
+
+  .metric-label {
+    font-size: 0.78rem;
+  }
+
+  .metric-sub {
+    font-size: 0.68rem;
+  }
+
+  .section {
+    padding: 3.75rem 0;
+  }
+
+  .section-title {
+    font-size: clamp(1.9rem, 9vw, 2.5rem);
+  }
+
+  .section-desc {
+    font-size: 0.95rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .section-header-row {
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .filter-bar {
+    max-width: 100%;
+    border-radius: 1rem;
+  }
+
+  .filter-btn {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.72rem;
+  }
+
+  .projects-grid,
+  .cp-grid,
+  .github-repos-grid {
+    gap: 1rem;
+  }
+
+  .project-card,
+  .cp-card,
+  .github-repo-card,
+  .skill-category-card {
+    border-radius: 1.25rem;
+  }
+
+  .project-featured .project-media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .project-badge {
+    top: 0.75rem;
+    right: 0.75rem;
+    max-width: calc(100% - 1.5rem);
+    padding: 0.35rem 0.6rem;
+    font-size: 0.64rem;
+    white-space: normal;
+    text-align: right;
+  }
+
+  .project-header-overlay {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .project-title {
+    font-size: 1.5rem;
+  }
+
+  .project-body,
+  .cp-card,
+  .github-repo-card,
+  .skill-category-card {
+    padding: 1.25rem;
+  }
+
+  .project-body {
+    gap: 1.25rem;
+  }
+
+  .project-desc {
+    font-size: 0.88rem;
+  }
+
+  .project-actions {
+    align-items: stretch;
+  }
+
+  .project-actions > div {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .project-actions .btn,
+  .project-actions .btnn {
+    flex: 1 1 8rem;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .cp-banner,
+  .heatmap-outer {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+  }
+
+  .heatmap-header {
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .skill-item {
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .skill-item .font-mono {
+    flex: 0 1 48%;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-grid {
+    gap: 1.25rem;
+  }
+
+  .contact-grid .glass-panel,
+  .glass-panel.reveal-on-scroll {
+    padding: 1.25rem !important;
+    border-radius: 1.25rem;
+  }
+
+  .glass-panel.reveal-on-scroll > div:first-child {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem;
+  }
+
+  .glass-panel.reveal-on-scroll > div:first-child > div:last-child {
+    text-align: left !important;
+  }
+
+  #contact-form > div:first-of-type {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+
+  #contact-form > div:last-of-type {
+    justify-content: stretch !important;
+  }
+
+  #submit-btn {
+    width: 100%;
+  }
+
+  .modal-overlay {
+    padding: 0.75rem;
+  }
+
+  .modal-content {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+  }
+
+  .footer {
+    padding: 2.5rem 0;
+  }
+
+  .footer .container {
+    align-items: flex-start !important;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 380px) {
+  .container {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+  }
+
+  .metrics-grid,
+  .github-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-headline {
+    font-size: 2rem;
+  }
+}
