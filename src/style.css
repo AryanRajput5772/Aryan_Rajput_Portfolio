@@ -1682,6 +1682,7 @@ a {
 .btn-primary {
   background: #ffffff;
   color: #000000;
+  border-radius: 0.65rem;
   box-shadow:
     0 4px 20px rgba(255, 255, 255, 0.35),
     0 0 0 1px rgba(255, 255, 255, 0.8) inset;
@@ -1717,6 +1718,7 @@ a {
 .btn-glass {
   background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
+  border-radius: 0.65rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
