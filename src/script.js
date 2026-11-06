@@ -460,8 +460,48 @@ function initGitHubActivity() {
 
   function moveTooltip(e) {
     if (!tooltip) return;
-    tooltip.style.left = `${e.clientX}px`;
+
+    const viewportPadding = 8;
+    const tooltipWidth = tooltip.getBoundingClientRect().width;
+    const cellRect = e.currentTarget?.getBoundingClientRect?.();
+    const tooltipGap = 8;
+    const canPlaceLeft = cellRect && cellRect.left - tooltipGap - tooltipWidth >= 0;
+    const shouldPlaceLeft = Boolean(
+      cellRect &&
+      (cellRect.left > window.innerWidth / 2 ||
+        cellRect.right + tooltipWidth / 2 > window.innerWidth - viewportPadding) &&
+      canPlaceLeft
+    );
+
+    tooltip.classList.remove('below');
+    tooltip.classList.toggle('left', shouldPlaceLeft);
+
+    if (shouldPlaceLeft) {
+      // Right-edge cells get a tooltip anchored to their left side.
+      tooltip.style.left = `${cellRect.left - tooltipGap}px`;
+    } else {
+      const minX = viewportPadding + tooltipWidth / 2;
+      const maxX = Math.max(minX, window.innerWidth - viewportPadding - tooltipWidth / 2);
+      const boundedX = Math.min(Math.max(e.clientX, minX), maxX);
+      tooltip.style.left = `${boundedX}px`;
+    }
+
     tooltip.style.top = `${e.clientY - 10}px`;
+
+    // Keep the tooltip above the cell when possible, but move it below cells
+    // near the top edge so it remains completely visible on small screens.
+    let tooltipRect = tooltip.getBoundingClientRect();
+    if (tooltipRect.top < viewportPadding) {
+      tooltip.classList.add('below');
+      tooltip.style.top = `${e.clientY + 10}px`;
+      tooltipRect = tooltip.getBoundingClientRect();
+    }
+
+    // If there is not enough room below the cell, return it above the cell.
+    if (tooltipRect.bottom > window.innerHeight - viewportPadding) {
+      tooltip.classList.remove('below');
+      tooltip.style.top = `${e.clientY - 10}px`;
+    }
   }
 
   function hideTooltip() {
