@@ -3,7 +3,7 @@
  * Pure Vanilla JavaScript (Zero Dependencies, Zero Frameworks)
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   initThemeSelector();
   initScrollReveal();
   initProjectFilters();
@@ -14,35 +14,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 1. Multi-Theme Selector (Obsidian, Cyber, Emerald, Sunset, Nordic)
 function initThemeSelector() {
-  const triggerBtn = document.getElementById('theme-trigger-btn');
-  const dropdown = document.getElementById('theme-menu-dropdown');
-  const triggerText = document.getElementById('theme-trigger-text');
-  const activeDot = document.getElementById('theme-active-indicator');
-  const optBtns = document.querySelectorAll('.theme-opt-btn');
+  const triggerBtn = document.getElementById("theme-trigger-btn");
+  const dropdown = document.getElementById("theme-menu-dropdown");
+  const triggerText = document.getElementById("theme-trigger-text");
+  const activeDot = document.getElementById("theme-active-indicator");
+  const optBtns = document.querySelectorAll(".theme-opt-btn");
 
   const themeNames = {
-    obsidian: 'Obsidian',
-    cyber: 'Cyber',
-    emerald: 'Emerald',
-    sunset: 'Sunset',
-    nordic: 'Nordic'
+    obsidian: "Obsidian",
+    cyber: "Cyber",
+    emerald: "Emerald",
+    sunset: "Sunset",
+    nordic: "Nordic",
   };
 
   const themeColors = {
-    obsidian: '#ffffff',
-    cyber: '#a855f7',
-    emerald: '#10b981',
-    sunset: '#f59e0b',
-    nordic: '#38bdf8'
+    obsidian: "#ffffff",
+    cyber: "#a855f7",
+    emerald: "#10b981",
+    sunset: "#f59e0b",
+    nordic: "#38bdf8",
   };
 
-  const savedTheme = localStorage.getItem('portfolio-theme') || 'obsidian';
+  const savedTheme = localStorage.getItem("portfolio-theme") || "obsidian";
   applyTheme(savedTheme);
 
   if (triggerBtn && dropdown) {
-    triggerBtn.addEventListener('click', (e) => {
+    triggerBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isExpanded = triggerBtn.getAttribute('aria-expanded') === 'true';
+      const isExpanded = triggerBtn.getAttribute("aria-expanded") === "true";
       if (isExpanded) {
         closeThemeMenu();
       } else {
@@ -50,22 +50,22 @@ function initThemeSelector() {
       }
     });
 
-    document.addEventListener('click', (e) => {
+    document.addEventListener("click", (e) => {
       if (!dropdown.contains(e.target) && !triggerBtn.contains(e.target)) {
         closeThemeMenu();
       }
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
         closeThemeMenu();
       }
     });
   }
 
   optBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const theme = btn.getAttribute('data-theme-value');
+    btn.addEventListener("click", () => {
+      const theme = btn.getAttribute("data-theme-value");
       if (theme) {
         applyTheme(theme);
         closeThemeMenu();
@@ -75,22 +75,22 @@ function initThemeSelector() {
 
   function openThemeMenu() {
     if (!dropdown || !triggerBtn) return;
-    dropdown.classList.add('show');
-    triggerBtn.setAttribute('aria-expanded', 'true');
+    dropdown.classList.add("show");
+    triggerBtn.setAttribute("aria-expanded", "true");
   }
 
   function closeThemeMenu() {
     if (!dropdown || !triggerBtn) return;
-    dropdown.classList.remove('show');
-    triggerBtn.setAttribute('aria-expanded', 'false');
+    dropdown.classList.remove("show");
+    triggerBtn.setAttribute("aria-expanded", "false");
   }
 
   function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('portfolio-theme', theme);
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("portfolio-theme", theme);
 
     if (triggerText) {
-      triggerText.textContent = themeNames[theme] || 'Theme';
+      triggerText.textContent = themeNames[theme] || "Theme";
     }
 
     if (activeDot && themeColors[theme]) {
@@ -99,10 +99,10 @@ function initThemeSelector() {
     }
 
     optBtns.forEach((b) => {
-      if (b.getAttribute('data-theme-value') === theme) {
-        b.classList.add('active');
+      if (b.getAttribute("data-theme-value") === theme) {
+        b.classList.add("active");
       } else {
-        b.classList.remove('active');
+        b.classList.remove("active");
       }
     });
   }
@@ -110,61 +110,68 @@ function initThemeSelector() {
 
 // 2. IntersectionObserver Scroll-Reveal Animation
 function initScrollReveal() {
-  const revealElements = document.querySelectorAll('.reveal-on-scroll');
+  const revealElements = document.querySelectorAll(".reveal-on-scroll");
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('revealed');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.12,
-    rootMargin: '0px 0px -40px 0px'
-  });
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.12,
+      rootMargin: "0px 0px -40px 0px",
+    },
+  );
 
   revealElements.forEach((el) => observer.observe(el));
 }
 
 // 3. Project Filter Tabs
 function initProjectFilters() {
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const projectCards = document.querySelectorAll('.project-card');
-  const filterBar = document.querySelector('.filter-bar');
+  const filterBtns = document.querySelectorAll(".filter-btn");
+  const projectCards = document.querySelectorAll(".project-card");
+  const filterBar = document.querySelector(".filter-bar");
 
   if (filterBar) {
-    filterBar.addEventListener('wheel', (event) => {
-      if (
-        Math.abs(event.deltaY) > Math.abs(event.deltaX) &&
-        filterBar.scrollWidth > filterBar.clientWidth
-      ) {
-        event.preventDefault();
-        filterBar.scrollLeft += event.deltaY;
-      }
-    }, { passive: false });
+    filterBar.addEventListener(
+      "wheel",
+      (event) => {
+        if (
+          Math.abs(event.deltaY) > Math.abs(event.deltaX) &&
+          filterBar.scrollWidth > filterBar.clientWidth
+        ) {
+          event.preventDefault();
+          filterBar.scrollLeft += event.deltaY;
+        }
+      },
+      { passive: false },
+    );
   }
 
   filterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
+    btn.addEventListener("click", () => {
+      filterBtns.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
 
-      const filter = btn.getAttribute('data-filter');
+      const filter = btn.getAttribute("data-filter");
 
       projectCards.forEach((card) => {
-        const category = card.getAttribute('data-category');
-        if (filter === 'all' || category === filter) {
-          card.style.display = 'flex';
+        const category = card.getAttribute("data-category");
+        if (filter === "all" || category === filter) {
+          card.style.display = "flex";
           setTimeout(() => {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
+            card.style.opacity = "1";
+            card.style.transform = "translateY(0)";
           }, 50);
         } else {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(10px)';
+          card.style.opacity = "0";
+          card.style.transform = "translateY(10px)";
           setTimeout(() => {
-            card.style.display = 'none';
+            card.style.display = "none";
           }, 200);
         }
       });
@@ -173,107 +180,132 @@ function initProjectFilters() {
 }
 
 // 4. Functional Contact Form with simulated routing & mailto fallback
+
 function initContactForm() {
-  const form = document.getElementById('contact-form');
-  const alertContainer = document.getElementById('form-alert');
-  const submitBtn = document.getElementById('submit-btn');
+  const form = document.getElementById("contact-form");
+  const alertContainer = document.getElementById("form-alert");
+  const submitBtn = document.getElementById("submit-btn");
 
   if (!form) return;
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name = form.name.value.trim();
-    const email = form.email.value.trim();
-    const subject = form.subject.value.trim();
-    const message = form.message.value.trim();
+    const name = form.elements.namedItem("name").value.trim();
+    const email = form.elements.namedItem("email").value.trim();
+    const subject = form.elements.namedItem("subject").value.trim();
+    const message = form.elements.namedItem("message").value.trim();
 
     if (!name || !email || !subject || !message) {
-      showAlert('Please fill in all fields (name, email, subject, message).', 'error');
+      showAlert(
+        "Please fill in all fields (name, email, subject, message).",
+        "error",
+      );
       return;
     }
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Delivering Message...';
+    submitBtn.textContent = "Delivering Message...";
 
-    // Simulated network receipt with submission ID
-    setTimeout(() => {
-      const submissionId = `MSG-${Date.now().toString(36).toUpperCase()}`;
-      
-      // Save in local storage
-      const existing = JSON.parse(localStorage.getItem('sent_inquiries') || '[]');
-      existing.push({ name, email, subject, message, date: new Date().toISOString(), submissionId });
-      localStorage.setItem('sent_inquiries', JSON.stringify(existing));
+    try {
+      const response = await fetch("https://formspree.io/f/mjkvdgek", {
+        method: "POST",
+        body: new FormData(form),
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        showAlert(
+          `✓ Thank you, ${name}! Your message has been successfully sent to Aryan Rajput.`,
+          "success",
+        );
+
+        form.reset();
+      } else {
+        const errorMessage = result.errors
+          ? result.errors.map((error) => error.message).join(", ")
+          : "Unable to send your message. Please try again.";
+
+        showAlert(errorMessage, "error");
+      }
+    } catch (error) {
+      console.error("Formspree submission error:", error);
 
       showAlert(
-        `✓ Thank you, ${name}! Your message has been sent to Aryan Rajput (aryanrajput4266@gmail.com). Reference ID: ${submissionId}`,
-        'success'
+        "Something went wrong. Please check your internet connection and try again.",
+        "error",
       );
-
-      form.reset();
+    } finally {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Send Message';
-    }, 600);
+      submitBtn.textContent = "Send Message";
+    }
   });
 
   function showAlert(text, type) {
     if (!alertContainer) return;
-    alertContainer.style.display = 'block';
-    if (type === 'success') {
-      alertContainer.style.background = 'rgba(16, 185, 129, 0.15)';
-      alertContainer.style.borderColor = 'rgba(16, 185, 129, 0.3)';
-      alertContainer.style.color = '#34d399';
+
+    alertContainer.style.display = "block";
+
+    if (type === "success") {
+      alertContainer.style.background = "rgba(16, 185, 129, 0.15)";
+      alertContainer.style.borderColor = "rgba(16, 185, 129, 0.3)";
+      alertContainer.style.color = "#34d399";
     } else {
-      alertContainer.style.background = 'rgba(239, 68, 68, 0.15)';
-      alertContainer.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-      alertContainer.style.color = '#f87171';
+      alertContainer.style.background = "rgba(239, 68, 68, 0.15)";
+      alertContainer.style.borderColor = "rgba(239, 68, 68, 0.3)";
+      alertContainer.style.color = "#f87171";
     }
+
     alertContainer.textContent = text;
   }
 }
 
 // 5. Modals Management (Resume Viewer)
 function initModals() {
-  const resumeModal = document.getElementById('resume-modal');
-  const openResumeBtns = document.querySelectorAll('.open-resume-btn');
-  const closeResumeBtn = document.getElementById('close-resume-modal');
+  const resumeModal = document.getElementById("resume-modal");
+  const openResumeBtns = document.querySelectorAll(".open-resume-btn");
+  const closeResumeBtn = document.getElementById("close-resume-modal");
 
   openResumeBtns.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener("click", (e) => {
       e.preventDefault();
-      if (resumeModal) resumeModal.classList.add('open');
+      if (resumeModal) resumeModal.classList.add("open");
     });
   });
 
   if (closeResumeBtn && resumeModal) {
-    closeResumeBtn.addEventListener('click', () => {
-      resumeModal.classList.remove('open');
+    closeResumeBtn.addEventListener("click", () => {
+      resumeModal.classList.remove("open");
     });
   }
 
-  window.addEventListener('click', (e) => {
+  window.addEventListener("click", (e) => {
     if (e.target === resumeModal) {
-      resumeModal.classList.remove('open');
+      resumeModal.classList.remove("open");
     }
   });
 
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && resumeModal) {
-      resumeModal.classList.remove('open');
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && resumeModal) {
+      resumeModal.classList.remove("open");
     }
   });
 }
 
 // 6. Copy Email to Clipboard
 function initCopyEmail() {
-  const copyBtn = document.getElementById('copy-email-btn');
+  const copyBtn = document.getElementById("copy-email-btn");
   if (!copyBtn) return;
 
-  copyBtn.addEventListener('click', () => {
-    const email = 'aryanrajput4266@gmail.com';
+  copyBtn.addEventListener("click", () => {
+    const email = "aryanrajput4266@gmail.com";
     navigator.clipboard.writeText(email).then(() => {
       const originalText = copyBtn.textContent;
-      copyBtn.textContent = 'Copied!';
+      copyBtn.textContent = "Copied!";
       setTimeout(() => {
         copyBtn.textContent = originalText;
       }, 2000);
@@ -283,34 +315,42 @@ function initCopyEmail() {
 
 // 7. Dynamic GitHub Contribution Heatmap & Stats
 function initGitHubActivity() {
-  const username = 'AryanRajput5772';
-  const heatmapGrid = document.getElementById('heatmap-grid');
-  const tooltip = document.getElementById('heatmap-tooltip');
-  const totalContributionsEl = document.getElementById('github-total-contributions');
-  const publicReposEl = document.getElementById('github-public-repos');
-  const syncStatusEl = document.getElementById('github-sync-status');
-  const refreshBtn = document.getElementById('github-refresh-btn');
-  const heatmapScrollWrapper = document.querySelector('.heatmap-scroll-wrapper');
+  const username = "AryanRajput5772";
+  const heatmapGrid = document.getElementById("heatmap-grid");
+  const tooltip = document.getElementById("heatmap-tooltip");
+  const totalContributionsEl = document.getElementById(
+    "github-total-contributions",
+  );
+  const publicReposEl = document.getElementById("github-public-repos");
+  const syncStatusEl = document.getElementById("github-sync-status");
+  const refreshBtn = document.getElementById("github-refresh-btn");
+  const heatmapScrollWrapper = document.querySelector(
+    ".heatmap-scroll-wrapper",
+  );
 
   if (!heatmapGrid) return;
 
   if (heatmapScrollWrapper) {
-    heatmapScrollWrapper.addEventListener('wheel', (event) => {
-      if (
-        Math.abs(event.deltaY) > Math.abs(event.deltaX) &&
-        heatmapScrollWrapper.scrollWidth > heatmapScrollWrapper.clientWidth
-      ) {
-        event.preventDefault();
-        heatmapScrollWrapper.scrollLeft += event.deltaY;
-      }
-    }, { passive: false });
+    heatmapScrollWrapper.addEventListener(
+      "wheel",
+      (event) => {
+        if (
+          Math.abs(event.deltaY) > Math.abs(event.deltaX) &&
+          heatmapScrollWrapper.scrollWidth > heatmapScrollWrapper.clientWidth
+        ) {
+          event.preventDefault();
+          heatmapScrollWrapper.scrollLeft += event.deltaY;
+        }
+      },
+      { passive: false },
+    );
   }
 
   loadGitHubData();
 
   if (refreshBtn) {
-    refreshBtn.addEventListener('click', () => {
-      if (syncStatusEl) syncStatusEl.textContent = 'Syncing...';
+    refreshBtn.addEventListener("click", () => {
+      if (syncStatusEl) syncStatusEl.textContent = "Syncing...";
       loadGitHubData(true);
     });
   }
@@ -322,60 +362,66 @@ function initGitHubActivity() {
         .then((res) => (res.ok ? res.json() : null))
         .then((userData) => {
           if (userData && publicReposEl) {
-            publicReposEl.textContent = userData.public_repos || '16';
+            publicReposEl.textContent = userData.public_repos || "16";
           }
         })
         .catch(() => {});
 
       // Fetch contributions
-      const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
-      if (!response.ok) throw new Error('Failed to fetch contributions API');
-      
+      const response = await fetch(
+        `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
+      );
+      if (!response.ok) throw new Error("Failed to fetch contributions API");
+
       const data = await response.json();
-      
+
       if (data && data.contributions && data.contributions.length > 0) {
         renderHeatmap(data.contributions);
-        if (totalContributionsEl && data.total && data.total.lastYear !== undefined) {
+        if (
+          totalContributionsEl &&
+          data.total &&
+          data.total.lastYear !== undefined
+        ) {
           totalContributionsEl.textContent = `${data.total.lastYear}`;
         }
         if (syncStatusEl) {
-          syncStatusEl.textContent = 'Live Synced';
-          syncStatusEl.style.color = '#34d399';
+          syncStatusEl.textContent = "Live Synced";
+          syncStatusEl.style.color = "#34d399";
         }
         return;
       }
-      throw new Error('Empty contributions data');
+      throw new Error("Empty contributions data");
     } catch (err) {
-      console.warn('Using cached GitHub contribution matrix:', err);
+      console.warn("Using cached GitHub contribution matrix:", err);
       renderFallbackHeatmap();
       if (syncStatusEl) {
-        syncStatusEl.textContent = 'Active Cached';
-        syncStatusEl.style.color = '#38bdf8';
+        syncStatusEl.textContent = "Active Cached";
+        syncStatusEl.style.color = "#38bdf8";
       }
     }
   }
 
   function renderHeatmap(days) {
-    heatmapGrid.innerHTML = '';
+    heatmapGrid.innerHTML = "";
 
     // Slice to exactly the last 52 weeks (364 days)
     const recentDays = days.slice(-364);
 
     recentDays.forEach((day) => {
-      const cell = document.createElement('div');
-      cell.className = 'heatmap-cell';
-      cell.setAttribute('data-level', day.level !== undefined ? day.level : 0);
-      cell.setAttribute('data-date', day.date);
-      cell.setAttribute('data-count', day.count || 0);
+      const cell = document.createElement("div");
+      cell.className = "heatmap-cell";
+      cell.setAttribute("data-level", day.level !== undefined ? day.level : 0);
+      cell.setAttribute("data-date", day.date);
+      cell.setAttribute("data-count", day.count || 0);
 
       // Tooltip events
-      cell.addEventListener('mouseenter', (e) => {
+      cell.addEventListener("mouseenter", (e) => {
         showTooltip(e, day.date, day.count || 0);
       });
-      cell.addEventListener('mousemove', (e) => {
+      cell.addEventListener("mousemove", (e) => {
         moveTooltip(e);
       });
-      cell.addEventListener('mouseleave', () => {
+      cell.addEventListener("mouseleave", () => {
         hideTooltip();
       });
 
@@ -386,16 +432,16 @@ function initGitHubActivity() {
   }
 
   function renderFallbackHeatmap() {
-    heatmapGrid.innerHTML = '';
+    heatmapGrid.innerHTML = "";
     const now = new Date();
     const days = [];
-    
+
     // Generate 364 days with typical realistic activity corresponding to Aryan's 81 contributions
     for (let i = 363; i >= 0; i--) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split('T')[0];
-      
+      const dateStr = d.toISOString().split("T")[0];
+
       // Known active clusters
       const dayOfWeek = d.getDay();
       const month = d.getMonth();
@@ -403,7 +449,8 @@ function initGitHubActivity() {
       let level = 0;
 
       // Realistic algorithmic and project push frequencies
-      const seed = (d.getFullYear() * 1000 + (month + 1) * 31 + d.getDate()) % 17;
+      const seed =
+        (d.getFullYear() * 1000 + (month + 1) * 31 + d.getDate()) % 17;
       if (seed === 3 || seed === 7 || seed === 11) {
         count = (seed % 4) + 1;
         level = count > 3 ? 3 : count > 1 ? 2 : 1;
@@ -413,7 +460,7 @@ function initGitHubActivity() {
     }
 
     renderHeatmap(days);
-    if (totalContributionsEl) totalContributionsEl.textContent = '81+';
+    if (totalContributionsEl) totalContributionsEl.textContent = "81+";
   }
 
   function calculateStreaks(days) {
@@ -439,22 +486,25 @@ function initGitHubActivity() {
       }
     }
 
-    const streakEl = document.getElementById('github-max-streak');
+    const streakEl = document.getElementById("github-max-streak");
     if (streakEl) streakEl.textContent = `${Math.max(maxStreak, 8)} Days`;
   }
 
   function showTooltip(e, dateStr, count) {
     if (!tooltip) return;
     const dateObj = new Date(dateStr);
-    const formattedDate = dateObj.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
+    const formattedDate = dateObj.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     });
-    
-    const countText = count === 0 ? 'No contributions' : `${count} contribution${count > 1 ? 's' : ''}`;
+
+    const countText =
+      count === 0
+        ? "No contributions"
+        : `${count} contribution${count > 1 ? "s" : ""}`;
     tooltip.innerHTML = `<strong>${countText}</strong> on ${formattedDate}`;
-    tooltip.classList.add('visible');
+    tooltip.classList.add("visible");
     moveTooltip(e);
   }
 
@@ -465,23 +515,28 @@ function initGitHubActivity() {
     const tooltipWidth = tooltip.getBoundingClientRect().width;
     const cellRect = e.currentTarget?.getBoundingClientRect?.();
     const tooltipGap = 8;
-    const canPlaceLeft = cellRect && cellRect.left - tooltipGap - tooltipWidth >= 0;
+    const canPlaceLeft =
+      cellRect && cellRect.left - tooltipGap - tooltipWidth >= 0;
     const shouldPlaceLeft = Boolean(
       cellRect &&
       (cellRect.left > window.innerWidth / 2 ||
-        cellRect.right + tooltipWidth / 2 > window.innerWidth - viewportPadding) &&
-      canPlaceLeft
+        cellRect.right + tooltipWidth / 2 >
+          window.innerWidth - viewportPadding) &&
+      canPlaceLeft,
     );
 
-    tooltip.classList.remove('below');
-    tooltip.classList.toggle('left', shouldPlaceLeft);
+    tooltip.classList.remove("below");
+    tooltip.classList.toggle("left", shouldPlaceLeft);
 
     if (shouldPlaceLeft) {
       // Right-edge cells get a tooltip anchored to their left side.
       tooltip.style.left = `${cellRect.left - tooltipGap}px`;
     } else {
       const minX = viewportPadding + tooltipWidth / 2;
-      const maxX = Math.max(minX, window.innerWidth - viewportPadding - tooltipWidth / 2);
+      const maxX = Math.max(
+        minX,
+        window.innerWidth - viewportPadding - tooltipWidth / 2,
+      );
       const boundedX = Math.min(Math.max(e.clientX, minX), maxX);
       tooltip.style.left = `${boundedX}px`;
     }
@@ -492,25 +547,25 @@ function initGitHubActivity() {
     // near the top edge so it remains completely visible on small screens.
     let tooltipRect = tooltip.getBoundingClientRect();
     if (tooltipRect.top < viewportPadding) {
-      tooltip.classList.add('below');
+      tooltip.classList.add("below");
       tooltip.style.top = `${e.clientY + 10}px`;
       tooltipRect = tooltip.getBoundingClientRect();
     }
 
     // If there is not enough room below the cell, return it above the cell.
     if (tooltipRect.bottom > window.innerHeight - viewportPadding) {
-      tooltip.classList.remove('below');
+      tooltip.classList.remove("below");
       tooltip.style.top = `${e.clientY - 10}px`;
     }
   }
 
   function hideTooltip() {
     if (!tooltip) return;
-    tooltip.classList.remove('visible');
+    tooltip.classList.remove("visible");
   }
 }
 
 // Call on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   initGitHubActivity();
 });
