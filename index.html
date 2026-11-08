@@ -236,8 +236,6 @@
             </div>
           </div>
         </div>
-      </section>
-
       <!-- Metrics Proof Bar in Frosted Glass -->
       <section class="metrics-bar">
         <div class="container">
@@ -879,9 +877,78 @@
               >
             </div>
           </div>
+          <!-- LeetCode Activity Heatmap -->
+          <div class="heatmap-outer leetcode-heatmap-outer reveal-on-scroll">
+            <div class="heatmap-header">
+              <div style="display: flex; align-items: center; gap: 0.75rem">
+                <div class="leetcode-mark" aria-hidden="true">
+                  <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                    <path d="M43 9 21 31c-7 7-7 15 0 22l8 8" fill="none" stroke="#3d3d3d" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M29 61c5 5 13 5 18-1l4-4" fill="none" stroke="#ffa116" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M48 39h20" fill="none" stroke="#bcbcbc" stroke-width="7" stroke-linecap="round" />
+                    <path d="M50 30h15" fill="none" stroke="#dedede" stroke-width="6" stroke-linecap="round" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff">
+                    LeetCode Submission Timeline
+                  </h3>
+                  <div style="font-size: 0.75rem; color: var(--text-muted)">
+                    Daily accepted and attempted submissions over the past year
+                  </div>
+                </div>
+              </div>
+              <div class="leetcode-heatmap-controls">
+                <span id="leetcode-sync-status" class="activity-sync-status" role="status" aria-live="polite">
+                  Connecting...
+                </span>
+                <button id="leetcode-refresh-btn" class="btn btn-glass activity-sync-button" type="button" title="Refresh LeetCode activity">
+                  Sync
+                </button>
+              </div>
+            </div>
+
+            <div class="leetcode-summary" aria-live="polite">
+              <strong id="leetcode-submission-total">—</strong>
+              <span>submissions in the past year</span>
+              <span class="leetcode-summary-divider" aria-hidden="true">·</span>
+              <strong id="leetcode-active-days">—</strong>
+              <span>active days</span>
+            </div>
+
+            <div class="heatmap-scroll-wrapper leetcode-heatmap-scroll">
+              <div class="heatmap-wrapper">
+                <div id="leetcode-months" class="heatmap-months" aria-hidden="true"></div>
+                <div class="heatmap-body">
+                  <div class="heatmap-days" aria-hidden="true">
+                    <span>Mon</span>
+                    <span>Wed</span>
+                    <span>Fri</span>
+                  </div>
+                  <div id="leetcode-heatmap-grid" class="heatmap-grid leetcode-heatmap-grid" role="img" aria-label="LeetCode submissions by day for the past year">
+                    <div class="leetcode-empty-state">Loading LeetCode activity…</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="heatmap-footer">
+              <a href="https://leetcode.com/u/Aryan_Rajput4266/" target="_blank" rel="noreferrer" class="activity-profile-link">
+                View LeetCode Profile (@Aryan_Rajput4266) ↗
+              </a>
+              <div class="heatmap-legend" aria-label="Submission intensity legend">
+                <span>Less</span>
+                <span class="heatmap-legend-box leetcode-level-0"></span>
+                <span class="heatmap-legend-box leetcode-level-1"></span>
+                <span class="heatmap-legend-box leetcode-level-2"></span>
+                <span class="heatmap-legend-box leetcode-level-3"></span>
+                <span class="heatmap-legend-box leetcode-level-4"></span>
+                <span>More</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-
       <!-- GitHub Activity & Dynamic Heatmap Section -->
       <section id="activity" class="section">
         <div class="container">

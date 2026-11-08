@@ -565,7 +565,168 @@ function initGitHubActivity() {
   }
 }
 
+// 8. LeetCode submission calendar with manual and periodic live refresh
+function initLeetCodeActivity() {
+  const username = "Aryan_Rajput4266";
+  const grid = document.getElementById("leetcode-heatmap-grid");
+  if (!grid) return;
+
+  const monthsEl = document.getElementById("leetcode-months");
+  const statusEl = document.getElementById("leetcode-sync-status");
+  const refreshBtn = document.getElementById("leetcode-refresh-btn");
+  const totalEl = document.getElementById("leetcode-submission-total");
+  const activeDaysEl = document.getElementById("leetcode-active-days");
+  const tooltip = document.getElementById("heatmap-tooltip");
+  const storageKey = `leetcode-calendar-${username}`;
+
+  refreshBtn?.addEventListener("click", () => loadCalendar());
+  loadCalendar();
+  window.setInterval(() => loadCalendar(), 30 * 60 * 1000);
+
+  async function loadCalendar() {
+    if (refreshBtn) refreshBtn.disabled = true;
+    setStatus("Syncing…", "#fbbf24");
+    try {
+      const years = [new Date().getFullYear(), new Date().getFullYear() - 1];
+      const calendars = await Promise.all(years.map(fetchCalendar));
+      const counts = Object.assign({}, ...calendars);
+      if (!Object.keys(counts).length) throw new Error("The calendar feed returned no activity data");
+      renderCalendar(counts);
+      try {
+        localStorage.setItem(storageKey, JSON.stringify({ savedAt: Date.now(), counts }));
+      } catch (_) {}
+      setStatus("Live synced", "#34d399");
+    } catch (error) {
+      console.warn("Unable to sync LeetCode activity:", error);
+      const cached = readCache();
+      if (cached) {
+        renderCalendar(cached.counts);
+        setStatus("Cached · sync unavailable", "#38bdf8");
+      } else {
+        grid.innerHTML = '<div class="leetcode-empty-state">LeetCode activity is temporarily unavailable. Try syncing again.</div>';
+        if (totalEl) totalEl.textContent = "—";
+        if (activeDaysEl) activeDaysEl.textContent = "—";
+        setStatus("Unable to sync", "#f87171");
+      }
+    } finally {
+      if (refreshBtn) refreshBtn.disabled = false;
+    }
+  }
+
+  async function fetchCalendar(year) {
+    const response = await fetch(
+      `https://alfa-leetcode-api.onrender.com/${encodeURIComponent(username)}/calendar?year=${year}`,
+      { cache: "no-store", signal: AbortSignal.timeout(15000) },
+    );
+    if (!response.ok) throw new Error(`Calendar service returned ${response.status}`);
+    const payload = await response.json();
+    let raw = payload?.submissionCalendar ?? payload?.calendar ?? payload?.data?.submissionCalendar ?? payload?.data?.userCalendar?.submissionCalendar;
+    if (typeof raw === "string") {
+      try { raw = JSON.parse(raw); } catch (_) { return {}; }
+    }
+    if (Array.isArray(raw)) return Object.fromEntries(raw.map((entry) => [entry.date, Number(entry.count) || 0]));
+    if (!raw || typeof raw !== "object") return {};
+    return Object.fromEntries(Object.entries(raw).map(([key, value]) => {
+      const timestamp = Number(key);
+      const date = Number.isFinite(timestamp) && timestamp > 0
+        ? new Date(timestamp < 1e12 ? timestamp * 1000 : timestamp).toISOString().slice(0, 10)
+        : key.slice(0, 10);
+      const count = typeof value === "object" && value !== null ? Number(value.count) : Number(value);
+      return [date, Number.isFinite(count) ? count : 0];
+    }));
+  }
+
+  function renderCalendar(counts) {
+    const today = new Date();
+    const end = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const start = new Date(end);
+    start.setDate(start.getDate() - 364);
+    const firstVisibleDate = formatDateKey(start);
+    start.setDate(start.getDate() - start.getDay());
+    const days = [];
+    const cursor = new Date(start);
+    while (cursor <= end || cursor.getDay() !== 0) {
+      const date = formatDateKey(cursor);
+      days.push({ date, count: Number(counts[date]) || 0 });
+      cursor.setDate(cursor.getDate() + 1);
+      if (days.length > 371) break;
+    }
+
+    const max = Math.max(1, ...days.map((day) => day.count));
+    grid.innerHTML = "";
+    days.forEach((day) => {
+      const cell = document.createElement("div");
+      const level = day.count === 0 ? 0 : Math.min(4, Math.ceil((day.count / max) * 4));
+      cell.className = "heatmap-cell";
+      cell.dataset.level = String(level);
+      cell.dataset.date = day.date;
+      cell.dataset.count = String(day.count);
+      cell.setAttribute("aria-label", `${day.count} submissions on ${day.date}`);
+      cell.addEventListener("mouseenter", (event) => showTooltip(event, day));
+      cell.addEventListener("mousemove", moveTooltip);
+      cell.addEventListener("mouseleave", hideTooltip);
+      grid.appendChild(cell);
+    });
+
+    if (monthsEl) {
+      monthsEl.innerHTML = "";
+      let lastMonth = "";
+      days.forEach((day, index) => {
+        const date = new Date(`${day.date}T00:00:00`);
+        const month = `${date.getFullYear()}-${date.getMonth()}`;
+        if (date.getDate() <= 7 && month !== lastMonth) {
+          const label = document.createElement("span");
+          label.className = "heatmap-month-label";
+          label.textContent = date.toLocaleDateString("en-US", { month: "short" });
+          label.style.gridColumn = String(Math.floor(index / 7) + 1);
+          monthsEl.appendChild(label);
+          lastMonth = month;
+        }
+      });
+    }
+
+    const total = days.reduce((sum, day) => sum + (day.date >= firstVisibleDate ? day.count : 0), 0);
+    if (totalEl) totalEl.textContent = total.toLocaleString();
+    if (activeDaysEl) activeDaysEl.textContent = days.filter((day) => day.date >= firstVisibleDate && day.count > 0).length.toLocaleString();
+  }
+
+  function formatDateKey(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  function showTooltip(event, day) {
+    if (!tooltip) return;
+    const date = new Date(`${day.date}T00:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    tooltip.innerHTML = `<strong>${day.count} submission${day.count === 1 ? "" : "s"}</strong> on ${date}`;
+    tooltip.classList.add("visible");
+    moveTooltip(event);
+  }
+
+  function moveTooltip(event) {
+    if (!tooltip) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    tooltip.style.left = `${Math.min(window.innerWidth - 120, Math.max(120, event.clientX))}px`;
+    tooltip.style.top = `${rect.top}px`;
+    tooltip.classList.remove("left", "below");
+  }
+
+  function hideTooltip() { tooltip?.classList.remove("visible"); }
+  function setStatus(text, color) {
+    if (statusEl) { statusEl.textContent = text; statusEl.style.color = color; }
+  }
+  function readCache() {
+    try {
+      const cached = JSON.parse(localStorage.getItem(storageKey) || "null");
+      return cached?.counts ? cached : null;
+    } catch (_) { return null; }
+  }
+}
+
 // Call on DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
   initGitHubActivity();
+  initLeetCodeActivity();
 });
