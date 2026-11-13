@@ -775,7 +775,7 @@ a {
   display: grid;
   grid-template-columns: 1fr;
   gap: 3.5rem;
-  align-items: center;
+  align-items: start;
 }
 
 @media (min-width: 1024px) {
